@@ -1,5 +1,10 @@
 <template>
   <v-system-bar app window style="-webkit-app-region: drag" class="pr-0">
+    <v-avatar size="32" class="mr-2" tile>
+      <img src="/icon.png"/>
+    </v-avatar>
+    <v-spacer/>
+    Classroom Helper
     <v-spacer/>
     <v-btn @click="minimize" depressed tile height="32" style="-webkit-app-region: no-drag" color="transparent">
       <v-icon class="ma-0">mdi-minus</v-icon>
