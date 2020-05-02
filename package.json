@@ -22,6 +22,7 @@
     "vuetify": "^2.2.11"
   },
   "devDependencies": {
+    "@types/node": "^12.12.6",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "@vue/cli-plugin-babel": "~4.3.0",
@@ -50,5 +51,8 @@
   "description": "Classroom helper",
   "license": "Apache-2.0",
   "author": "ZhangZisu <admin@zhangzisu.cn> (https://zhangzisu.cn)",
-  "repository": "git@github.com:ZhangZisu/classroom-helper.git"
+  "repository": "git@github.com:ZhangZisu/classroom-helper.git",
+  "resolutions": {
+    "vue-cli-plugin-electron-builder/electron-builder": "22.6.0"
+  }
 }
