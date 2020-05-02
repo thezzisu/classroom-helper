@@ -17,6 +17,7 @@ jobs:
         node-version: 12.x
     - run: yarn
     - run: yarn generate-icons
-    - run: yarn build
-      env:
-        GH_TOKEN: ${{ secrets.github_token }}
+    - uses: samuelmeuli/action-electron-builder@v1
+      with:
+        github_token: ${{ secrets.github_token }}
+        use_vue_cli: true
