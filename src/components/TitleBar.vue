@@ -4,7 +4,7 @@
       <img src="/icon.png"/>
     </v-avatar>
     <v-spacer/>
-    Classroom Helper
+    张氏课堂助手
     <v-spacer/>
     <v-btn @click="minimize" depressed tile height="32" style="-webkit-app-region: no-drag" color="transparent">
       <v-icon class="ma-0">mdi-minus</v-icon>

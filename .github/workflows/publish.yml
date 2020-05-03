@@ -17,6 +17,6 @@ jobs:
         node-version: 12.x
     - run: yarn
     - run: yarn generate-icons
-    - run: yarn build
+    - run: yarn build --publish always
       env:
         GH_TOKEN: ${{ secrets.github_token }}

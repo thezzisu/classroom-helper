@@ -3,6 +3,7 @@
 import path from 'path'
 import { app, protocol, BrowserWindow, Tray, Menu, Notification } from 'electron'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
+import { getConfig } from './common/config'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -12,23 +13,7 @@ let win: BrowserWindow | null
 let tray: Tray | null
 const icon = path.join(__static, 'icon.png')
 
-function createTray() {
-  const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show', click: () => { if (win !== null) win.show() } },
-    { label: 'Quit', click: () => { app.quit() } }
-  ])
-  tray = new Tray(icon)
-  tray.setContextMenu(contextMenu)
-  tray.on('double-click', () => {
-    if (win !== null) {
-      win.show()
-    } else {
-      createWindow()
-    }
-  })
-}
-
-function createWindow() {
+function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
     width: 800,
@@ -52,6 +37,16 @@ function createWindow() {
   win.on('closed', () => {
     win = null
   })
+}
+
+function createTray () {
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Show', click: () => { win ? win.show() : createWindow() } },
+    { label: 'Quit', click: () => { app.quit() } }
+  ])
+  tray = new Tray(icon)
+  tray.setContextMenu(contextMenu)
+  tray.on('double-click', () => { win ? win.show() : createWindow() })
 }
 
 if (app.requestSingleInstanceLock()) {
@@ -80,7 +75,10 @@ if (app.requestSingleInstanceLock()) {
       }
     }
     createTray()
-    createWindow()
+    const config = getConfig()
+    if (!config.hideOnStart) {
+      createWindow()
+    }
   })
 
   // Exit cleanly on request from parent process in development mode.

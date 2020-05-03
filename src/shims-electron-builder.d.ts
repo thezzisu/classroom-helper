@@ -1,1 +1,1 @@
-declare var __static: string
+declare let __static: string
