@@ -1,19 +1,19 @@
 import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
+import { routes } from '@/modules'
 
 Vue.use(VueRouter)
 
-const routes: Array<RouteConfig> = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  }
-]
-
 const router = new VueRouter({
-  routes
+  routes: [
+    {
+      path: '/',
+      name: 'Home',
+      component: Home
+    },
+    ...routes
+  ]
 })
 
 export default router

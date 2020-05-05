@@ -22,6 +22,14 @@
             <v-list-item-title>概览</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item v-for="(x, i) in nav" :key="i" :to="x.path">
+          <v-list-item-avatar tile size="24">
+            <v-icon>mdi-{{ x.icon }}</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{ x.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <v-content>
@@ -36,9 +44,12 @@
 import { Vue, Component } from 'vue-property-decorator'
 import TitleBar from '@/components/TitleBar.vue'
 import { shell } from 'electron'
+import { nav } from '@/modules'
 
 @Component({ components: { TitleBar } })
 export default class App extends Vue {
+  readonly nav = nav
+
   drawer = false
 
   openHomepage () {
