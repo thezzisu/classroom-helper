@@ -53,12 +53,13 @@ function shouldChange (p: string) {
 }
 
 function getDst (p: string) {
+  const name = path.basename(p)
   if (mediaExts.some(x => x.test(p))) {
-    return path.resolve(desktop, '临时媒体')
+    return path.resolve(desktop, '临时媒体', name)
   } else if (coursesExts.some(x => x.test(p))) {
-    return path.resolve(desktop, '课件')
+    return path.resolve(desktop, '课件', name)
   } else {
-    return path.resolve(desktop, '未整理')
+    return path.resolve(desktop, '未整理', name)
   }
 }
 

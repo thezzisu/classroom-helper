@@ -1,19 +1,21 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col lg="4">
+      <v-col lg="6" xl="4">
         <v-card>
           <v-card-title>
             <v-img src="/icon.png" height="8em" contain/>
             <div class="text-center" style="width: 100%">
-              <div>张氏课堂助手&trade;</div>
-              <div class="subtitle-2">&copy; ZhangZisu</div>
+              <v-badge content="preview">
+                <div>张氏课堂助手&trade;</div>
+              </v-badge>
+              <div class="subtitle-2">Apache-2.0 &copy; ZhangZisu</div>
             </div>
           </v-card-title>
           <v-divider/>
           <v-card-text>
-            <v-switch label="开机自动启动" v-model="config.autoStart"/>
-            <v-switch label="启动时不显示窗口" v-model="config.hideOnStart"/>
+            <v-switch readonly label="开机自动启动" v-model="config.autoStart"/>
+            <v-switch readonly label="启动时不显示窗口" v-model="config.hideOnStart"/>
           </v-card-text>
           <v-divider/>
           <v-list>
@@ -30,7 +32,7 @@
           <v-divider/>
           <v-card-actions>
             <v-spacer/>
-            <v-btn @click="openDevTools">
+            <v-btn @click="openDevTools" depressed>
               开发者工具
             </v-btn>
           </v-card-actions>

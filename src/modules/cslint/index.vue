@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col rows="auto">
+    <v-row justify="center">
+      <v-col>
         <v-card>
           <v-card-title>
             自动课件整理
@@ -18,7 +18,7 @@
             </v-expansion-panel>
           </v-expansion-panels>
           <v-card-text>
-            <v-list>
+            <v-list v-if="changes.length">
               <v-list-item v-for="(c, i) in changes" :key="i">
                 <v-list-item-icon>
                   <v-icon>mdi-file</v-icon>
@@ -30,10 +30,10 @@
                 <v-list-item-action>
                   <v-row no-gutters>
                     <v-col>
-                      <v-btn icon color="success">
+                      <v-btn icon color="success" disabled>
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
-                      <v-btn icon color="error">
+                      <v-btn icon color="error" disabled>
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </v-col>
@@ -41,12 +41,21 @@
                 </v-list-item-action>
               </v-list-item>
             </v-list>
+            <v-row v-else justify="center">
+              <v-col cols="auto">
+                <div class="text-center">
+                  <v-icon large>mdi-information-outline</v-icon>
+                  <br/>
+                  没有未整理的课件
+                </div>
+              </v-col>
+            </v-row>
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
             <v-btn color="success" @click="scan">重新扫描</v-btn>
             <v-btn color="error" @click="$router.push('/')">取消</v-btn>
-            <v-btn color="primary" @click="apply">继续</v-btn>
+            <v-btn color="primary" @click="apply" :disabled="!changes.length">继续</v-btn>
           </v-card-actions>
           <v-overlay v-model="loading" absolute class="text-center">
             <v-progress-circular indeterminate/>
@@ -88,12 +97,18 @@ export default class Index extends Vue {
     const all = this.changes.length
     let cur = 0
     for (const change of this.changes) {
-      fs.copyFile(change.src, change.dst)
+      await fs.move(change.src, change.dst)
       cur++
       win.setProgressBar(cur / all)
     }
     win.setProgressBar(-1)
     this.loading = false
+    // eslint-disable-next-line no-new
+    new Notification('课堂助手', {
+      image: '/icon.png',
+      body: '文件整理完成'
+    })
+    this.scan()
   }
 }
 </script>

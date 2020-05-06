@@ -1,7 +1,8 @@
 import { RouteConfig } from 'vue-router'
-import autoshutdown from './cslint'
+import cslint from './cslint'
+import autoshut from './autoshut'
 
-const modules = [autoshutdown]
+const modules = [cslint, autoshut]
 
 export const routes: RouteConfig[] = modules.map(x => ({
   path: '/' + x.id,
