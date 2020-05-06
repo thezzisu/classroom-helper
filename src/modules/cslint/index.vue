@@ -19,13 +19,13 @@
           </v-expansion-panels>
           <v-card-text>
             <v-list>
-              <v-list-item>
+              <v-list-item v-for="(c, i) in changes" :key="i">
                 <v-list-item-icon>
                   <v-icon>mdi-file</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>1.pptx</v-list-item-title>
-                  <v-list-item-subtitle>移动到：课件/英语</v-list-item-subtitle>
+                  <v-list-item-title>{{ c.src }}</v-list-item-title>
+                  <v-list-item-subtitle>移动到：{{ c.dst }}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-row no-gutters>
@@ -44,13 +44,14 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <v-btn color="error">取消</v-btn>
-            <v-btn color="primary">继续</v-btn>
+            <v-btn color="success" @click="scan">重新扫描</v-btn>
+            <v-btn color="error" @click="$router.push('/')">取消</v-btn>
+            <v-btn color="primary" @click="apply">继续</v-btn>
           </v-card-actions>
           <v-overlay v-model="loading" absolute class="text-center">
             <v-progress-circular indeterminate/>
             <div>
-              扫描文件变动中
+              执行文件操作中
             </div>
           </v-overlay>
         </v-card>
@@ -61,12 +62,38 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { getChanges } from './scan'
+import { getChanges, Change } from './scan'
+import { remote } from 'electron'
+import * as fs from 'fs-extra'
 
 @Component
 export default class Index extends Vue {
-  readonly conditions = getChanges.toString()
-
   loading = false
+
+  changes: Change[] = []
+
+  mounted () {
+    this.scan()
+  }
+
+  async scan () {
+    this.loading = true
+    this.changes = await getChanges()
+    this.loading = false
+  }
+
+  async apply () {
+    this.loading = true
+    const win = remote.getCurrentWindow()
+    const all = this.changes.length
+    let cur = 0
+    for (const change of this.changes) {
+      fs.copyFile(change.src, change.dst)
+      cur++
+      win.setProgressBar(cur / all)
+    }
+    win.setProgressBar(-1)
+    this.loading = false
+  }
 }
 </script>
