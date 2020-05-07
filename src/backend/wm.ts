@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron'
-import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import path from 'path'
+import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 
 let win: BrowserWindow | null
 
@@ -16,6 +16,9 @@ export function createWindow (module?: string) {
     icon: path.join(__static, 'icon.png')
   })
 
+  if (!process.env.WEBPACK_DEV_SERVER_URL) {
+    createProtocol('app')
+  }
   const base = process.env.WEBPACK_DEV_SERVER_URL || 'app://./index.html'
   win.loadURL(module ? base + '/#/' + module : base)
 

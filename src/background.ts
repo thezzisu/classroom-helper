@@ -2,7 +2,7 @@
 
 import path from 'path'
 import { app, protocol, Notification } from 'electron'
-import { installVueDevtools, createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import { installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 import { getConfig } from '@/common/config'
 import { showWindow, createWindow } from '@/backend/wm'
 import { createTray } from '@/backend/tray'
@@ -15,14 +15,10 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: tru
 const icon = path.join(__static, 'icon.png')
 
 if (app.requestSingleInstanceLock()) {
-  if (!process.env.WEBPACK_DEV_SERVER_URL) {
-    createProtocol('app')
-  }
-
   app.on('window-all-closed', () => {
     const ntf = new Notification({
-      title: 'Classroom helper',
-      body: 'running in background',
+      title: '课堂助手',
+      body: '正在后台运行',
       icon
     })
     ntf.show()
