@@ -7,7 +7,7 @@
             <v-img src="/icon.png" height="8em" contain/>
             <div class="text-center" style="width: 100%">
               <v-badge content="preview">
-                <div>张氏课堂助手&trade;</div>
+                <div>课堂助手</div>
               </v-badge>
               <div class="subtitle-2">Apache-2.0 &copy; ZhangZisu</div>
             </div>

@@ -12,7 +12,7 @@ module.exports = {
     electronBuilder: {
       builderOptions: {
         appId: 'cn.zhangzisu.classroom-helper',
-        productName: '张氏课堂助手'
+        productName: '课堂助手'
       }
     }
   },

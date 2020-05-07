@@ -1,55 +1,24 @@
 'use strict'
 
 import path from 'path'
-import { app, protocol, BrowserWindow, Tray, Menu, Notification } from 'electron'
-import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
-import { getConfig } from './common/config'
+import { app, protocol, Notification } from 'electron'
+import { installVueDevtools, createProtocol } from 'vue-cli-plugin-electron-builder/lib'
+import { getConfig } from '@/common/config'
+import { showWindow, createWindow } from '@/backend/wm'
+import { createTray } from '@/backend/tray'
+import { onReady } from '@/modules/bg'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])
 
-let win: BrowserWindow | null
-let tray: Tray | null
 const icon = path.join(__static, 'icon.png')
 
-function createWindow () {
-  // Create the browser window.
-  win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true
-    },
-    frame: false,
-    icon: icon
-  })
-
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
-  } else {
+if (app.requestSingleInstanceLock()) {
+  if (!process.env.WEBPACK_DEV_SERVER_URL) {
     createProtocol('app')
-    // Load the index.html when not in development
-    win.loadURL('app://./index.html')
   }
 
-  win.on('closed', () => {
-    win = null
-  })
-}
-
-function createTray () {
-  const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show', click: () => { win ? win.show() : createWindow() } },
-    { label: 'Quit', click: () => { app.quit() } }
-  ])
-  tray = new Tray(icon)
-  tray.setContextMenu(contextMenu)
-  tray.on('double-click', () => { win ? win.show() : createWindow() })
-}
-
-if (app.requestSingleInstanceLock()) {
   app.on('window-all-closed', () => {
     const ntf = new Notification({
       title: 'Classroom helper',
@@ -60,9 +29,7 @@ if (app.requestSingleInstanceLock()) {
   })
 
   app.on('activate', () => {
-    if (win === null) {
-      createWindow()
-    }
+    showWindow()
   })
 
   app.on('ready', async () => {
@@ -79,6 +46,7 @@ if (app.requestSingleInstanceLock()) {
     if (!config.hideOnStart) {
       createWindow()
     }
+    onReady()
   })
 
   // Exit cleanly on request from parent process in development mode.

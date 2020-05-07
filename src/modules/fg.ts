@@ -1,16 +1,16 @@
 import { RouteConfig } from 'vue-router'
-import cslint from './cslint'
-import autoshut from './autoshut'
+import cslint from './cslint/fg'
+import autoshut from './autoshut/fg'
 
 const modules = [cslint, autoshut]
 
 export const routes: RouteConfig[] = modules.map(x => ({
-  path: '/' + x.id,
+  path: '/' + x.mod.id,
   component: x.view
 }))
 
 export const nav = modules.map(x => ({
-  path: '/' + x.id,
-  title: x.name,
-  icon: x.icon
+  path: '/' + x.mod.id,
+  title: x.mod.name,
+  icon: x.mod.icon
 }))

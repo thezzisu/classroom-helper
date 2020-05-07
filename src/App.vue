@@ -44,7 +44,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import TitleBar from '@/components/TitleBar.vue'
 import { shell } from 'electron'
-import { nav } from '@/modules'
+import { nav } from '@/modules/fg'
 
 @Component({ components: { TitleBar } })
 export default class App extends Vue {
