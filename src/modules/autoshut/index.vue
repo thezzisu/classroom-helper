@@ -50,7 +50,7 @@ export default class Index extends Vue {
   created () {
     const day = 1000 * 60 * 60 * 24
     let target = new Date(Math.floor(Date.now() / day) * day)
-    target.setHours(9)
+    target.setHours(21)
     target.setMinutes(20)
     if (+target <= Date.now()) {
       target = new Date(+target + day)
@@ -61,10 +61,10 @@ export default class Index extends Vue {
       if (restMs < 0) {
         cp.exec('shutdown -s -f -t 0')
       }
-      const rest = new Date(+target - Date.now())
-      this.restH = rest.getHours().toString().padStart(2, '0')
-      this.restM = rest.getMinutes().toString().padStart(2, '0')
-      this.restS = rest.getSeconds().toString().padStart(2, '0')
+      let rest = +target - Date.now()
+      this.restS = ((rest /= 1000) % 60).toString().padStart(2, '0')
+      this.restM = ((rest /= 60) % 60).toString().padStart(2, '0')
+      this.restH = (rest /= 60).toString().padStart(2, '0')
     }, 1000)
     this.$on('hook:beforeDestory', () => {
       clearInterval(id)

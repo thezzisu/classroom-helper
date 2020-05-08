@@ -4,7 +4,7 @@ import * as electron from 'electron'
 
 const app = electron.app || electron.remote.app
 
-const root = path.join(app.getPath('appData'), 'classroom-helper')
+const root = path.join(app.getPath('appData'), 'classroom-helper', 'config')
 ensureDirSync(root)
 
 const configPath = path.join(root, 'config.json')

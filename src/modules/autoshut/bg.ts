@@ -10,7 +10,7 @@ export default {
   onReady () {
     const day = 1000 * 60 * 60 * 24
     let target = new Date(Math.floor(Date.now() / day) * day)
-    target.setHours(9)
+    target.setHours(21)
     target.setMinutes(20)
     if (+target <= Date.now()) {
       target = new Date(+target + day)
