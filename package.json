@@ -13,6 +13,7 @@
   "main": "background.js",
   "dependencies": {
     "@mdi/font": "^5.1.45",
+    "chokidar": "^3.4.0",
     "core-js": "^3.6.4",
     "fs-extra": "^9.0.0",
     "roboto-fontface": "*",

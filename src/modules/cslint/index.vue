@@ -21,11 +21,13 @@
             <v-list v-if="changes.length">
               <v-list-item v-for="(c, i) in changes" :key="i">
                 <v-list-item-icon>
-                  <v-icon>mdi-file</v-icon>
+                  <v-icon v-if="c.src.includes('~$')">mdi-lock</v-icon>
+                  <v-icon v-else>mdi-file</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>{{ c.src }}</v-list-item-title>
-                  <v-list-item-subtitle>移动到：{{ c.dst }}</v-list-item-subtitle>
+                  <v-list-item-subtitle v-if="c.dst === '#remove'">删除</v-list-item-subtitle>
+                  <v-list-item-subtitle v-else>移动到：{{ c.dst }}</v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-action>
                   <v-row no-gutters>
@@ -33,7 +35,7 @@
                       <v-btn icon color="success" disabled>
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
-                      <v-btn icon color="error" disabled>
+                      <v-btn icon color="error" @click="changes.splice(i, 1)">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </v-col>
@@ -72,7 +74,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { getChanges, Change } from './scan'
-import { remote } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 import * as fs from 'fs-extra'
 
 @Component
@@ -83,6 +85,13 @@ export default class Index extends Vue {
 
   mounted () {
     this.scan()
+    const listener = () => {
+      this.scan()
+    }
+    ipcRenderer.addListener('cslint-fschanged', listener)
+    this.$on('hook:beforeDestroy', () => {
+      ipcRenderer.removeListener('cslint-fschanged', listener)
+    })
   }
 
   async scan () {
@@ -96,17 +105,32 @@ export default class Index extends Vue {
     const win = remote.getCurrentWindow()
     const all = this.changes.length
     let cur = 0
+    let succ = 0
+    let fail = 0
     for (const change of this.changes) {
-      await fs.move(change.src, change.dst)
+      try {
+        if (change.dst === '#remove') {
+          await fs.unlink(change.src)
+        } else {
+          await fs.move(change.src, change.dst)
+        }
+        succ++
+      } catch (e) {
+        // eslint-disable-next-line no-new
+        new Notification('课堂助手-课件整理', {
+          body: `${change.src}操作失败\n${e.message}`
+        })
+        fail++
+      }
       cur++
       win.setProgressBar(cur / all)
     }
     win.setProgressBar(-1)
     this.loading = false
     // eslint-disable-next-line no-new
-    new Notification('课堂助手', {
+    new Notification('课堂助手-课件整理', {
       image: '/icon.png',
-      body: '文件整理完成'
+      body: `整理完成 ${succ}成功 ${fail}失败`
     })
     this.scan()
   }

@@ -39,3 +39,7 @@ export function showWindow (module?: string) {
     createWindow(module)
   }
 }
+
+export function getWindow () {
+  return win
+}

@@ -10,9 +10,13 @@ module.exports = {
   ],
   pluginOptions: {
     electronBuilder: {
+      externals: ['chokidar', 'fs-extra'],
       builderOptions: {
-        appId: 'cn.zhangzisu.classroom-helper',
-        productName: '课堂助手'
+        appId: 'zhangzisu.classroom-helper',
+        productName: '课堂助手',
+        win: {
+          requestedExecutionLevel: 'requireAdministrator'
+        }
       }
     }
   },
