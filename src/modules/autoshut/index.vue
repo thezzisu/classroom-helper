@@ -62,9 +62,9 @@ export default class Index extends Vue {
         cp.exec('shutdown -s -f -t 0')
       }
       let rest = +target - Date.now()
-      this.restS = ((rest /= 1000) % 60).toString().padStart(2, '0')
-      this.restM = ((rest /= 60) % 60).toString().padStart(2, '0')
-      this.restH = (rest /= 60).toString().padStart(2, '0')
+      this.restS = ((rest = Math.floor(rest / 1000)) % 60).toString().padStart(2, '0')
+      this.restM = ((rest = Math.floor(rest / 60)) % 60).toString().padStart(2, '0')
+      this.restH = (rest = Math.floor(rest / 60)).toString().padStart(2, '0')
     }, 1000)
     this.$on('hook:beforeDestory', () => {
       clearInterval(id)

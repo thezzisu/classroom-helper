@@ -1,11 +1,12 @@
 import path from 'path'
 import { Notification } from 'electron'
 import { showWindow } from '@/backend/wm'
+import { BgMod } from '@/modules/common'
 import mod from './mod'
 
 const icon = path.join(__static, 'icon.png')
 
-export default {
+const bgmod: BgMod = {
   mod,
   onReady () {
     const day = 1000 * 60 * 60 * 24
@@ -27,3 +28,5 @@ export default {
     }, delta)
   }
 }
+
+export default bgmod
