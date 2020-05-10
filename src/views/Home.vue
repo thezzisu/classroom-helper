@@ -32,6 +32,9 @@
           <v-divider/>
           <v-card-actions>
             <v-spacer/>
+            <v-btn @click="exit" depressed color="error">
+              退出
+            </v-btn>
             <v-btn @click="openDevTools" depressed>
               开发者工具
             </v-btn>
@@ -72,6 +75,10 @@ export default class Home extends Vue {
 
   openDevTools () {
     remote.getCurrentWebContents().openDevTools()
+  }
+
+  exit () {
+    remote.app.exit()
   }
 }
 </script>
