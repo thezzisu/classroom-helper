@@ -11,6 +11,7 @@ const configPath = path.join(root, 'config.json')
 
 const defaultConfig = {
   base: app.getPath('desktop'),
+  dist: app.getPath('desktop'),
   rules: {
     课件: [
       '\\.pptx?$',

@@ -17,7 +17,6 @@ const defaultConfig = {
 type Config = typeof defaultConfig
 
 export function saveConfig (config: Config) {
-  app.setLoginItemSettings({ openAtLogin: config.autoStart })
   writeFileSync(configPath, JSON.stringify(config, null, '\t'))
 }
 

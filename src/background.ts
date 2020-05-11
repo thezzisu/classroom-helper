@@ -39,6 +39,7 @@ if (app.requestSingleInstanceLock()) {
     }
     createTray()
     const config = getConfig()
+    app.setLoginItemSettings({ openAtLogin: config.autoStart })
     if (!config.hideOnStart) {
       createWindow()
     }

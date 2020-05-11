@@ -73,9 +73,11 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { getChanges, Change } from './scan'
 import { remote, ipcRenderer } from 'electron'
 import * as fs from 'fs-extra'
+import path from 'path'
+import { getChanges, Change } from './scan'
+import { getConfig } from './config'
 
 @Component
 export default class Index extends Vue {
@@ -102,6 +104,7 @@ export default class Index extends Vue {
 
   async apply () {
     this.loading = true
+    const cfg = getConfig()
     const win = remote.getCurrentWindow()
     const all = this.changes.length
     let cur = 0
@@ -112,7 +115,7 @@ export default class Index extends Vue {
         if (change.dst === '#remove') {
           await fs.unlink(change.src)
         } else {
-          await fs.move(change.src, change.dst)
+          await fs.move(change.src, path.resolve(cfg.dist, change.dst))
         }
         succ++
       } catch (e) {
