@@ -62,7 +62,7 @@ const defaultConfig = {
   ignore: readdirSync(app.getPath('desktop'))
 }
 
-type Config = typeof defaultConfig
+export type Config = typeof defaultConfig
 
 export function saveConfig (config: Config) {
   writeFileSync(configPath, JSON.stringify(config, null, '\t'))

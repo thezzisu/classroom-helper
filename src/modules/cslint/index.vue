@@ -56,6 +56,7 @@
           <v-card-actions>
             <v-spacer/>
             <v-btn color="success" @click="scan">重新扫描</v-btn>
+            <v-btn color="warning" @click="rebuildWhitelist">重构白名单</v-btn>
             <v-btn color="error" @click="$router.push('/')">取消</v-btn>
             <v-btn color="primary" @click="apply" :disabled="!changes.length">继续</v-btn>
           </v-card-actions>
@@ -68,6 +69,16 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-card-title>白名单</v-card-title>
+          <v-card-text>
+            <pre>{{ cfg.ignore.join('\n') }}</pre>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -77,13 +88,19 @@ import { remote, ipcRenderer } from 'electron'
 import fs from 'fs-extra'
 import path from 'path'
 import { getChanges, Change } from './scan'
-import { getConfig } from './config'
+import { getConfig, saveConfig, Config } from './config'
 
 @Component
 export default class Index extends Vue {
   loading = false
 
   changes: Change[] = []
+
+  cfg!: Config
+
+  created () {
+    this.refreshConfig()
+  }
 
   mounted () {
     this.scan()
@@ -96,6 +113,10 @@ export default class Index extends Vue {
     })
   }
 
+  refreshConfig () {
+    this.cfg = getConfig()
+  }
+
   async scan () {
     this.loading = true
     this.changes = await getChanges()
@@ -104,7 +125,6 @@ export default class Index extends Vue {
 
   async apply () {
     this.loading = true
-    const cfg = getConfig()
     const win = remote.getCurrentWindow()
     const all = this.changes.length
     let cur = 0
@@ -115,7 +135,7 @@ export default class Index extends Vue {
         if (change.dst === '#remove') {
           await fs.unlink(change.src)
         } else {
-          await fs.move(change.src, path.resolve(cfg.dist, change.dst))
+          await fs.move(change.src, path.resolve(this.cfg.dist, change.dst, path.basename(change.src)), { overwrite: true })
         }
         succ++
       } catch (e) {
@@ -136,6 +156,12 @@ export default class Index extends Vue {
       body: `整理完成 ${succ}成功 ${fail}失败`
     })
     this.scan()
+  }
+
+  rebuildWhitelist () {
+    this.cfg.ignore = fs.readdirSync(this.cfg.base)
+    saveConfig(this.cfg)
+    this.refreshConfig()
   }
 }
 </script>

@@ -8,7 +8,9 @@ const bgmod: BgMod = {
   mod,
   onReady: () => {
     const cfg = getConfig()
-    const watcher = chokidar.watch(cfg.base)
+    const watcher = chokidar.watch(cfg.base, {
+      depth: 1
+    })
     watcher.on('all', () => {
       const win = getWindow()
       if (!win) return

@@ -37,6 +37,9 @@
               自动关机已禁用
             </v-card-text>
           </template>
+          <v-card-actions>
+            <v-btn color="error" @click="shut" block>强制关机</v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -71,7 +74,7 @@ export default class Index extends Vue {
       const id = setInterval(() => {
         const restMs = +target - Date.now()
         if (restMs < 0) {
-          cp.exec('shutdown -s -f -t 0')
+          this.shut()
         }
         let rest = +target - Date.now()
         this.restS = ((rest = Math.floor(rest / 1000)) % 60).toString().padStart(2, '0')
@@ -84,6 +87,10 @@ export default class Index extends Vue {
     } else {
       this.enabled = false
     }
+  }
+
+  shut () {
+    cp.exec('shutdown -s -f -t 0')
   }
 }
 </script>
