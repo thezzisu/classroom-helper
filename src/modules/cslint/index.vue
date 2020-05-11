@@ -74,7 +74,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { remote, ipcRenderer } from 'electron'
-import * as fs from 'fs-extra'
+import fs from 'fs-extra'
 import path from 'path'
 import { getChanges, Change } from './scan'
 import { getConfig } from './config'

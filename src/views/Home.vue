@@ -35,6 +35,9 @@
             <v-btn @click="exit" depressed color="error">
               退出
             </v-btn>
+            <v-btn @click="openConfigDir" depressed>
+              打开配置文件夹
+            </v-btn>
             <v-btn @click="openDevTools" depressed>
               开发者工具
             </v-btn>
@@ -47,9 +50,10 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator'
-import { remote } from 'electron'
-import * as pkg from '@/../package.json'
+import { remote, shell } from 'electron'
 import { getConfig, saveConfig } from '@/common/config'
+import path from 'path'
+import pkg from '@/../package.json'
 
 /* global GIT_HASH, GIT_BRANCH, BUILD_MACHINE, BUILD_DATE */
 
@@ -75,6 +79,10 @@ export default class Home extends Vue {
 
   openDevTools () {
     remote.getCurrentWebContents().openDevTools()
+  }
+
+  openConfigDir () {
+    shell.openExternal(path.join(remote.app.getPath('appData'), 'classroom-helper', 'config'))
   }
 
   exit () {

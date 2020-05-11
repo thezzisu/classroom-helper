@@ -1,6 +1,6 @@
 import { ensureDirSync, writeFileSync, readFileSync, existsSync, readdirSync } from 'fs-extra'
-import * as path from 'path'
-import * as electron from 'electron'
+import path from 'path'
+import electron from 'electron'
 
 const app = electron.app || electron.remote.app
 
