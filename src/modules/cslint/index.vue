@@ -118,12 +118,14 @@ export default class Index extends Vue {
   }
 
   async scan () {
+    if (this.loading) return
     this.loading = true
     this.changes = await getChanges()
     this.loading = false
   }
 
   async apply () {
+    if (this.loading) return
     this.loading = true
     const win = remote.getCurrentWindow()
     const all = this.changes.length
