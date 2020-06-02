@@ -28,6 +28,10 @@ if (app.requestSingleInstanceLock()) {
     showWindow()
   })
 
+  app.on('second-instance', () => {
+    showWindow()
+  })
+
   app.on('ready', async () => {
     if (isDevelopment && !process.env.IS_TEST) {
       // Install Vue Devtools
