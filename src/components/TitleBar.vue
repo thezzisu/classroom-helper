@@ -3,6 +3,22 @@
     <v-avatar size="32" class="mr-2" tile>
       <img src="/icon.png"/>
     </v-avatar>
+    <v-menu offset-y>
+      <template v-slot:activator="{ on }">
+        <v-btn text color="primary" v-on="on" style="-webkit-app-region: no-drag">文件</v-btn>
+      </template>
+      <v-list dense>
+        <v-list-item @click="openDevTools">
+          <v-list-item-title>开发者工具</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="reload">
+          <v-list-item-title>重载</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="exit">
+          <v-list-item-title>退出</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <v-spacer/>
     课堂助手
     <v-spacer/>
@@ -56,6 +72,18 @@ export default class TitleBar extends Vue {
 
   close () {
     this.window.close()
+  }
+
+  openDevTools () {
+    remote.getCurrentWebContents().openDevTools()
+  }
+
+  exit () {
+    remote.app.exit()
+  }
+
+  reload () {
+    remote.app.relaunch()
   }
 }
 </script>

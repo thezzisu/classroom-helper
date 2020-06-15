@@ -8,7 +8,7 @@
       <v-list nav>
         <v-list-item @click="openHomepage">
           <v-list-item-avatar tile size="24">
-            <v-img id="logo" contain :src="require('@/assets/logo.svg')"/>
+            <v-img id="logo" contain src="@/assets/logo.svg"/>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>ZhangZisu.CN</v-list-item-title>
@@ -28,6 +28,14 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ x.title }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/about">
+          <v-list-item-avatar tile size="24">
+            <v-icon>mdi-information-outline</v-icon>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>关于</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

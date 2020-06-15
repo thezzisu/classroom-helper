@@ -3,7 +3,8 @@
     <v-row justify="center">
       <v-col>
         <v-card>
-          <v-card-title>WIP</v-card-title>
+          <v-card-title>课件下载</v-card-title>
+
         </v-card>
       </v-col>
     </v-row>
