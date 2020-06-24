@@ -40,11 +40,11 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-content>
+    <v-main>
       <div class="content-wrap">
         <router-view/>
       </div>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
