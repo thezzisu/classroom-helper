@@ -12,9 +12,9 @@
             </v-col>
             <v-divider vertical/>
             <v-col>
-              <v-card-subtitle>老师寄语</v-card-subtitle>
+              <v-card-subtitle>习语江句</v-card-subtitle>
               <v-card-text>
-                关上门，隔离噪音；打开窗，放入花香
+                苟利国家生死以，岂因祸福避趋之
               </v-card-text>
               <v-divider/>
               <v-card-subtitle>高考倒计时</v-card-subtitle>
@@ -80,7 +80,7 @@ export default class Home extends Vue {
 
   getWeather () {
     this.ld0 = true
-    fetch('https://api.openweathermap.org/data/2.5/onecall?lat=29.95&lon=121.72&appid=2aa1712947719c02292a5bd3d2747b26')
+    fetch('https://api.openweathermap.org/data/2.5/onecall?lat=29.95&lon=121.72&appid=2aa1712947719c02292a5bd3d2747b26&lang=zh_cn')
       .then(resp => resp.json())
       .then(data => {
         this.weather = data.daily[0].weather[0].description
@@ -123,6 +123,7 @@ export default class Home extends Vue {
       await execAsync('TASKKILL /F /IM POWERPNT.EXE').catch(() => 0)
       await execAsync('TASKKILL /F /IM WINWORD.EXE').catch(() => 0)
       await execAsync('TASKKILL /F /IM EXCEL.EXE').catch(() => 0)
+      await execAsync('TASKKILL /F /IM EasiNote.exe').catch(() => 0)
     } catch (e) {
       console.log(e)
     } finally {
