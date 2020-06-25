@@ -70,7 +70,7 @@ export default class Home extends Vue {
 
   created () {
     const now = new Date()
-    this.today = `${now.getMonth()}月${now.getDate()}日 星期${'日一二三四五六'[now.getDay()]}`
+    this.today = `${now.getMonth() + 1}月${now.getDate()}日 星期${'日一二三四五六'[now.getDay()]}`
     this.getWeather()
   }
 
