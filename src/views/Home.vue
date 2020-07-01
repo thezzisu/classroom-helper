@@ -12,9 +12,10 @@
             </v-col>
             <v-divider vertical/>
             <v-col>
-              <v-card-subtitle>习语江句</v-card-subtitle>
+              <v-card-subtitle>习语江句<v-btn icon :loading="ld4" @click="golden"><v-icon>mdi-refresh</v-icon></v-btn></v-card-subtitle>
               <v-card-text>
-                苟利国家生死以，岂因祸福避趋之
+                {{ goldText }}
+                <p class="text-right ma-0">{{ goldFrom }}</p>
               </v-card-text>
               <v-divider/>
               <v-card-subtitle>高考倒计时</v-card-subtitle>
@@ -56,6 +57,10 @@ import { Vue, Component } from 'vue-property-decorator'
 import { shell, remote } from 'electron'
 import { promisify } from 'util'
 import { exec } from 'child_process'
+import path from 'path'
+import fs from 'fs-extra'
+
+/* global __static */
 
 const execAsync = promisify(exec)
 
@@ -67,10 +72,15 @@ export default class Home extends Vue {
   ld1 = false
   ld2 = false
   ld3 = false
+  ld4 = false
+  golds: string[][] = []
+  goldText = '续命中'
+  goldFrom = '扬州'
 
   created () {
     const now = new Date()
     this.today = `${now.getMonth() + 1}月${now.getDate()}日 星期${'日一二三四五六'[now.getDay()]}`
+    this.golden()
     this.getWeather()
   }
 
@@ -128,6 +138,36 @@ export default class Home extends Vue {
       console.log(e)
     } finally {
       this.ld3 = false
+    }
+  }
+
+  async golden () {
+    this.ld4 = true
+    try {
+      if (!this.golds.length) {
+        const file = path.join(__static, 'mottos.txt')
+        const content = await fs.readFile(file)
+        this.golds = content
+          .toString()
+          .split('\n')
+          .map(x => x.trim())
+          .join('\n')
+          .split('\n\n')
+          .filter(x => x.length)
+          .map(x => {
+            const y = x.split('\n')
+            const z = y.pop() || '出处：维基语录'
+            return [y.join('\n'), z]
+          })
+      }
+      const t = this.golds[Math.floor(Math.random() * this.golds.length)]
+      this.goldText = t[0]
+      this.goldFrom = t[1]
+    } catch (e) {
+      this.goldText = '你们啊，不要想……喜欢……这…欸弄个大新闻，说现在已经钦定了，再把我批判一番。'
+      this.goldFrom = '2000年受有线新闻台记者张宝华采访'
+    } finally {
+      this.ld4 = false
     }
   }
 }
