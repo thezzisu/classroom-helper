@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col lg="6" xl="4">
+      <v-col lg="10" xl="8">
         <v-card>
           <v-row no-gutters>
             <v-col cols="auto">
@@ -14,7 +14,7 @@
             <v-col>
               <v-card-subtitle>习语江句<v-btn icon :loading="ld4" @click="golden"><v-icon>mdi-refresh</v-icon></v-btn></v-card-subtitle>
               <v-card-text>
-                {{ goldText }}
+                <p class="gold">{{ goldText }}</p>
                 <p class="text-right ma-0">{{ goldFrom }}</p>
               </v-card-text>
               <v-divider/>
@@ -28,7 +28,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-col lg="6" xl="4">
+      <v-col lg="10" xl="8">
         <v-card>
           <v-card-title>
             快速操作
@@ -82,6 +82,10 @@ export default class Home extends Vue {
     this.today = `${now.getMonth() + 1}月${now.getDate()}日 星期${'日一二三四五六'[now.getDay()]}`
     this.golden()
     this.getWeather()
+    const i = setInterval(() => {
+      this.golden()
+    }, 10000)
+    this.$on('hooks:beforeDestory', () => clearInterval(i))
   }
 
   open (url: string) {
@@ -160,9 +164,10 @@ export default class Home extends Vue {
             return [y.join('\n'), z]
           })
       }
-      const t = this.golds[Math.floor(Math.random() * this.golds.length)]
-      this.goldText = t[0]
-      this.goldFrom = t[1]
+      const idx = Math.floor(Math.random() * this.golds.length)
+      const t = this.golds.splice(idx, 1)
+      this.goldText = t[0][0]
+      this.goldFrom = t[0][1]
     } catch (e) {
       this.goldText = '你们啊，不要想……喜欢……这…欸弄个大新闻，说现在已经钦定了，再把我批判一番。'
       this.goldFrom = '2000年受有线新闻台记者张宝华采访'
@@ -172,3 +177,11 @@ export default class Home extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.gold {
+  color: red;
+  font-family: 'KaiTi', Times, serif;
+  font-size: 1.5rem;
+}
+</style>
